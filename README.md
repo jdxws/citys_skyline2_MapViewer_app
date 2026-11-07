@@ -97,8 +97,8 @@
 
 | 平台 | 安装包 | 说明 |
 | --- | --- | --- |
-| Windows 安装版 | [下载 Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS%20Desktop-0.1.0-Setup.exe) | 安装向导版，可选择安装目录 |
-| Windows 免安装版 | [下载 Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS%20Desktop-0.1.0-Portable.exe) | 双击启动，无需安装 |
+| Windows 安装版 | [下载 Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Setup.exe) | 安装向导版，可选择安装目录 |
+| Windows 免安装版 | [下载 Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Portable.exe) | 双击启动，无需安装 |
 | Android | [下载 APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS-Android-20261106-i18n.apk) | 传到手机后直接安装 |
 
 ### Windows
