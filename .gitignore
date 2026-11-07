@@ -1,0 +1,38 @@
+# Dependencies and generated build files
+**/node_modules/
+**/release/
+**/build/
+**/.gradle/
+**/.idea/
+**/local.properties
+*.iml
+*.log
+
+# Local application distributions and working archives
+/SKYLENS Desktop-*/
+/SKYLENS Desktop/
+/*.zip
+*.apk
+*.aab
+
+# User data and signing material
+**/maps/
+**/library/
+**/exported_files/
+**/snapshots/
+*.jks
+*.keystore
+*.pfx
+*.p12
+.env
+.env.*
+
+# Local media exports; screenshots in docs are kept
+*.mp4
+*.mov
+*.webm
+Thumbs.db
+Desktop.ini
+
+# Local recording script (not for publication)
+/docs/SKYLENS-视频介绍稿.md

@@ -1,0 +1,73 @@
+{
+  "name": "skylens-desktop",
+  "productName": "SKYLENS Desktop",
+  "version": "0.1.0",
+  "description": "SKYLENS MAPS 离线桌面查看器：导入城市快照，在游戏之外查看 Cities: Skylines II 的城市地图",
+  "main": "src/main/main.js",
+  "author": "community",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/**/*.test.{js,mjs}\"",
+    "build:web": "node scripts/build-web.mjs",
+    "dist": "electron-builder --win --x64",
+    "dist:zip": "electron-builder --win zip --x64",
+    "dist:dir": "electron-builder --win dir --x64"
+  },
+  "dependencies": {
+    "extract-zip": "^2.0.1",
+    "geotiff": "^3.0.5",
+    "pngjs": "^7.0.0",
+    "proj4": "^2.22.0"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "io.github.skylens.desktop",
+    "productName": "SKYLENS Desktop",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "package.json",
+      "src/**/*",
+      "app/**/*",
+      "assets/**/*",
+      "LICENSE.txt",
+      "COPYRIGHT.txt",
+      "THIRD_PARTY_NOTICES.txt"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false,
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "artifactName": "${productName}-${version}-Setup.${ext}"
+    },
+    "compression": "normal",
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
+    }
+  }
+}

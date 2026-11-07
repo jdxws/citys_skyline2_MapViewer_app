@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKYLENS Desktop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><path d="M16 4 28 10.5 16 17 4 10.5z" fill="#7ee0c6"/><path d="M4 15.5 16 22 28 15.5" fill="none" stroke="#3fb8a0" stroke-width="2.4" stroke-linejoin="round"/><path d="M4 20.5 16 27 28 20.5" fill="none" stroke="#2a8a7a" stroke-width="2.4" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h1>SKYLENS Desktop</h1>
+        <p>离线查看《城市：天际线 2》城市地图快照</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="drop" class="drop" tabindex="0" aria-label="导入地图">
+      <div class="drop-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+      </div>
+      <h2>把地图拖到这里导入</h2>
+      <p>支持：快照 <b>.zip</b> 压缩包、<b>exported_files</b> 文件夹、已构建的 <b>dist</b> 文件夹，会自动识别。</p>
+      <div class="actions">
+        <button id="pickFolder" class="btn primary" type="button">选择文件夹…</button>
+        <button id="pickZip" class="btn" type="button">选择 ZIP…</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h3>我的地图</h3>
+        <span id="count" class="muted"></span>
+      </div>
+      <div id="list" class="list"></div>
+      <div id="empty" class="empty hidden">还没有导入任何地图。把快照拖进上面的区域就可以开始。</div>
+    </section>
+  </main>
+
+  <footer class="foot"><span id="libraryDir" class="muted"></span><button id="changeLibrary" class="btn small" type="button">更改存储位置…</button></footer>
+
+  <div id="overlay" class="overlay hidden" role="alertdialog" aria-live="polite">
+    <div class="card progress">
+      <h3 id="progressTitle">正在导入…</h3>
+      <p id="progressMessage" class="muted"></p>
+      <div class="bar"><div id="barFill" class="fill"></div></div>
+      <p class="muted small">大型城市的数据有几百 MB，请稍等片刻。</p>
+    </div>
+  </div>
+
+  <dialog id="renameDialog">
+    <form method="dialog" id="renameForm">
+      <h3>重命名地图</h3>
+      <input id="renameInput" type="text" maxlength="80" autocomplete="off" />
+      <div class="dialog-actions">
+        <button class="btn" value="cancel" type="submit" formnovalidate>取消</button>
+        <button class="btn primary" value="ok" type="submit">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>

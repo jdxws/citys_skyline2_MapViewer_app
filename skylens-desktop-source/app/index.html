@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#e9ece8" />
+  <title>Skylens Maps for CS2</title>
+  <script>
+    (() => {
+      const languageKey = 'cities-maps-language'
+      const migrationKey = 'skylens-default-language-zh-v1'
+      try {
+        if (!localStorage.getItem(migrationKey)) {
+          localStorage.setItem(languageKey, 'zh')
+          localStorage.setItem(migrationKey, '1')
+        }
+      } catch {}
+    })()
+  </script>
+  <script type="module" crossorigin src="./assets/index-D7ITdX9e.js"></script>
+  <script defer src="./insights.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BQoudQmF.css">
+  <link rel="stylesheet" href="./insights.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
