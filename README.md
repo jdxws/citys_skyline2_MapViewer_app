@@ -4,6 +4,8 @@
 
 <h1 align="center">SKYLENS Map Viewer</h1>
 
+[简体中文](README.md) | [English](README.en.md)
+
 <p align="center">
   在游戏之外，离线查看《城市：天际线 2》的城市地图
 </p>
@@ -25,10 +27,6 @@
 适合想在不启动游戏时查看路网、研究公交换乘、对照分区人口与用地，或者在手机上展示自己城市的玩家。它读取的是**导出时刻的城市快照**；城市发生变化后，需要重新导出和导入。它不能直接打开游戏存档，也不能编辑城市或把修改写回游戏。
 
 **第一次使用：下载客户端 → 在游戏中导出快照 → 导入客户端 → 打开地图。**
-
-- [Windows 安装包制作与 GitHub 发布说明](docs/发布与Windows安装包.md)
-
-> 本项目是非官方社区项目，与 Paradox Interactive、Colossal Order 或 SKYLENS MAPS 原作者没有隶属关系。
 
 ## 项目来源与上游使用说明
 
@@ -332,6 +330,7 @@ WebView 加载虚拟地址 `https://appassets.androidplatform.net/`。网页资�
 │  ├─ app/src/main/java/           原生 Java 客户端与核心逻辑
 │  └─ tools/                       核心自测与 Web 资源补丁
 ├─ docs/                           截图与使用、发布说明
+├─ README.en.md                    English documentation
 └─ README.md
 ```
 
@@ -346,7 +345,7 @@ WebView 加载虚拟地址 `https://appassets.androidplatform.net/`。网页资�
 - **交叉口转向限制识别不完整**：目前不能准确判断道路交汇处是否允许转向，可能规划出跨越实线等不符合游戏道路规则的路线。
 - **公共交通行驶方向尚未区分**：目前不能区分线路沿道路运行的正向与逆向，可能影响乘车方向、站点衔接及换乘方案的准确性。
 - Android 设备、WebView 版本和可用内存会影响地图加载速度及最大可导入规模。
-- 本项目不是官方游戏功能，不保证与未来游戏或模组版本持续兼容。
+- 不保证与未来游戏或模组版本持续兼容。
 
 ## 常见问题
 
@@ -374,13 +373,7 @@ Android 版没有内置原始导出目录整理流程。请先用 Windows 版导
 
 ## 许可证
 
-本项目使用 **GPL-3.0-only**。
-
-- [Windows 端许可证](skylens-desktop-source/LICENSE.txt)
-- [Android 端许可证](skylens-mobile-android-source/LICENSE.txt)
-- [第三方许可说明](skylens-desktop-source/THIRD_PARTY_NOTICES.txt)
-
-如果你分发修改后的版本，请同时遵守 GPL-3.0 的源码开放要求。
+本项目采用 GPL-3.0-only 许可证，详见 [LICENSE.txt](LICENSE.txt)；第三方组件许可见各客户端目录中的 `THIRD_PARTY_NOTICES.txt`。
 
 ---
 
