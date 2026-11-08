@@ -58,6 +58,8 @@
 - **地铁出入口**：导入快照时生成车站出入口索引，并根据入口、站内步行、线路和总耗时选择乘车方案。
 - **高精度道路展示**：按需加载道路面轮廓，减少默认打开地图时的内存和等待时间。
 - **Windows 与 Android 数据互通**：同一份已整理快照 ZIP 可以在两个客户端中导入。
+- **地图图片导出**：Windows 和 Android 地图页均提供方形 PNG 导出，可选择分辨率、范围、图层和具体交通线路，预览后保存。
+- **地铁示意图导出**：复用现有地铁生成器，选择线路、站名、图例及布局质量，导出方形 PNG 或 SVG。详情见[导出说明](skylens-desktop-source/docs/MAP-EXPORT.md)。
 
 ## 界面预览
 
@@ -95,9 +97,9 @@
 
 | 平台 | 安装包 | 说明 |
 | --- | --- | --- |
-| Windows 安装版 | [下载 Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Setup.exe) | 安装向导版，可选择安装目录 |
-| Windows 免安装版 | [下载 Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Portable.exe) | 双击启动，无需安装 |
-| Android | [下载 APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS-Android-20261106-i18n.apk) | 传到手机后直接安装 |
+| Windows 安装版 | [下载 Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Setup.exe) | 安装向导版，可选择安装目录 |
+| Windows 免安装版 | [下载 Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Portable.exe) | 双击启动，无需安装 |
+| Android | [下载 APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS-Android-0.1.1.apk) | 传到手机后直接安装 |
 
 ### Windows
 
@@ -113,7 +115,9 @@
 2. 在系统设置中允许当前文件管理器或浏览器“安装未知应用”。
 3. 打开 APK 完成安装。
 
-最低支持 Android 8.0（API 26）。如果设备上已经安装了旧测试版，可以优先尝试覆盖安装；卸载应用可能会同时清除应用内地图库，卸载前请先备份重要快照。
+最低支持 Android 8.0（API 26）。同签名版本可覆盖安装；升级前请保留原始快照 ZIP，卸载应用会清除应用内地图库。
+
+**v0.1.1 Android 升级提示：** 此次 APK 与 v0.1.0 使用的签名证书不同，无法直接覆盖安装该旧版。请先备份原始快照 ZIP 及需要保留的地图数据，再卸载旧版并安装新版，最后重新导入快照；卸载会清除应用内地图库。
 
 ## 准备城市数据
 
@@ -183,6 +187,16 @@ water-mask.png
 - “高精度道路”只负责显示道路面轮廓。道路宽度和交通量等属性仍通过点击道路中心线查看。
 - 手机端侧栏使用底部把手控制：点击可开关，向上拖动可展开，向下拖动可收起；侧栏展开时仍可移动地图。
 
+## 导出地图图片与地铁示意图
+
+在地图页右下角点击“导出图片”，选择导出类型、设置选项并生成预览，确认后保存到本地。两端均可使用，手机端会通过系统文件选择器保存文件。
+
+- **城市地图**：导出方形 PNG，可选择当前视野或全城范围，设置分辨率、图层、文字、图例和具体交通线路。
+- **地铁示意图**：选择需要的线路，设置站名、图例与布局质量，导出方形 PNG 或 SVG。示意图经过布局整理，不代表真实地理距离。
+- **分辨率**：提供 1024、2048、4096、8192 像素预设，也支持 256–8192 像素的整数边长；实际可用上限受设备能力影响。
+
+**生成速度与输出分辨率、城市数据量、可见图层、线路和站点数量、布局质量，以及设备的 CPU、GPU、内存和 WebView 性能有关。** 手机端通常需要更久，建议先使用 1024 或 2048 像素和标准布局质量；更高分辨率会明显增加内存占用与生成时间。边长翻倍时，像素数量会增加到四倍。地铁 SVG 可省去 PNG 的栅格化和编码步骤，但仍需计算线路布局。详细选项及限制见[图片导出说明](skylens-desktop-source/docs/MAP-EXPORT.md)。
+
 ## 路线导航
 
 选择起点和终点后，地图可以分别计算驾车与公共交通路线。
@@ -249,8 +263,8 @@ npm run dist
 生成 Windows 安装程序和便携版 EXE，预期产物为：
 
 ```text
-release/SKYLENS Desktop-0.1.0-Setup.exe
-release/SKYLENS Desktop-0.1.0-Portable.exe
+release/SKYLENS Desktop-0.1.1-Setup.exe
+release/SKYLENS Desktop-0.1.1-Portable.exe
 ```
 
 安装程序已配置为带向导、允许选择安装目录、默认按当前用户安装。首次构建需要联网获取 npm 依赖、Electron 和 NSIS 工具。详细说明见[安装包制作指南](docs/发布与Windows安装包.md)。构建成功后仍需实际检查安装、运行与卸载流程。

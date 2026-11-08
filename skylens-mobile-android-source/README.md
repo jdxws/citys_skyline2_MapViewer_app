@@ -19,8 +19,13 @@
 需要 JDK 17+ 和 Android SDK（设置 `ANDROID_HOME`，并安装 platform 34 与 build-tools）。
 ```
 ./gradlew assembleDebug        # Windows 用 gradlew.bat
+./gradlew assembleExportPreview # 可与旧版并存的“SKYLENS 导出测试版”
 ```
 产物：`app/build/outputs/apk/debug/app-debug.apk`
+
+导出测试版产物在 `app/build/outputs/apk/exportPreview/app-exportPreview.apk`，包名为 `io.github.skylens.mobile.exportpreview`，有独立地图库，需重新导入地图，不会覆盖旧版。版本号为 `0.1.1-export-preview`。
+
+构建时优先使用本地 `.signing/debug.keystore`（不提交到 Git）。请保留此文件，以便以后用同一签名覆盖更新；没有此文件时使用 Android 默认的调试签名配置。签名与已安装旧版不一致时，原包名 APK 不能直接覆盖安装，可先使用并行测试版。
 
 ### 把 APK 装到手机
 - 数据线 + USB 调试：`adb install -r app/build/outputs/apk/debug/app-debug.apk`
@@ -28,6 +33,8 @@
 - 用的是调试版，由 Android 自动签名，自己用完全够了。不要用 `assembleRelease`（它是未签名的，装不上）。
 
 ## 二、使用
+
+地图页右下角的“导出图片”支持方形地图 PNG 和地铁示意图 PNG/SVG，可选择图层、线路、分辨率并预览。保存使用系统文档选择器，手机建议先使用 1024 或 2048。共享导出代码的维护方法见 [MAP-EXPORT.md](../skylens-desktop-source/docs/MAP-EXPORT.md)。
 1. 把快照放到手机上（推荐一个 `.zip`；例如你的 `c4653fee929a085b.zip`）。
 2. 打开应用，点“选择 ZIP…”（或“选择文件夹…”），选中快照。
 3. 等导入完成（大快照仍可能有数百 MB，保持屏幕常亮），在“我的地图”里点“打开”。会保留高精度道路和用地统计所需的数据；高精度道路文件仅在地图里开启该图层后读取。

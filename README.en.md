@@ -56,6 +56,8 @@ The local map server launched by the upstream game mod depends on the game and m
 - **Subway entrances:** build an entrance index during import and consider access walking, station walking, transit segments, and total estimated time.
 - **Detailed road geometry:** load road surface outlines on demand to reduce initial loading time and memory use.
 - **Shared snapshot format:** import the same prepared snapshot ZIP on Windows and Android.
+- **Map image export:** export square PNG maps on both clients, with controls for resolution, extent, layers, labels, legends, and individual transit lines.
+- **Subway diagram export:** choose lines, station labels, legends, and layout quality, then save a square PNG or SVG diagram.
 
 ## Screenshots and video
 
@@ -67,9 +69,9 @@ Download packages from **[Releases](https://github.com/jdxws/citys_skyline2_MapV
 
 | Platform | Download | Description |
 | --- | --- | --- |
-| Windows installer | [Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Setup.exe) | Installation wizard with a choice of installation directory |
-| Windows without installation | [Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS.Desktop-0.1.0-Portable.exe) | Launch the executable directly |
-| Android | [APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.0/SKYLENS-Android-20261106-i18n.apk) | Transfer to your phone and install |
+| Windows installer | [Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Setup.exe) | Installation wizard with a choice of installation directory |
+| Windows without installation | [Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Portable.exe) | Launch the executable directly |
+| Android | [APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS-Android-0.1.1.apk) | Transfer to your phone and install |
 
 ### Windows
 
@@ -85,7 +87,9 @@ Supports 64-bit Windows 10/11. Release packages include Electron and the files n
 2. Allow the browser or file manager you are using to install unknown apps in Android's settings.
 3. Open the APK to install it.
 
-Requires Android 8.0 (API 26) or later. If you already have an older test build, try updating it in place first. Uninstalling may remove the map library, so back up important snapshots before uninstalling.
+Requires Android 8.0 (API 26) or later. Builds with the same signing certificate can update in place. Keep your original snapshot ZIPs before upgrading; uninstalling clears the application's map library.
+
+**Android v0.1.1 upgrade notice:** this APK uses a different signing certificate from v0.1.0 and cannot update that older build in place. Back up your original snapshot ZIPs and any maps you need before uninstalling the old app, installing the new version, and importing snapshots again. Uninstalling clears the application's map library.
 
 ## Prepare city data
 
@@ -155,6 +159,16 @@ When present, `Network_Boundary.json` is retained for the optional detailed-road
 - Detailed roads display road surface outlines. Click the centerlines to inspect properties such as width and traffic volume.
 - On Android, tap the bottom sidebar handle to toggle it, drag up to expand, or drag down to collapse. You can still move the map while the sidebar is expanded.
 
+## Export maps and subway diagrams
+
+Click the image export button in the lower-right corner of the map, choose an export type and settings, generate a preview, and save the result locally. Both clients support this feature; Android uses the system file picker to save files.
+
+- **City map:** export a square PNG of the current view or the whole city, with a choice of resolution, layers, labels, legends, and individual transit lines.
+- **Subway diagram:** select lines, station labels, legends, and layout quality, then export a square PNG or SVG. Diagram layout does not represent actual geographic distances.
+- **Resolution:** presets of 1024, 2048, 4096, and 8192 pixels, or an integer side length from 256 to 8192 pixels. Device capabilities may impose a lower practical limit.
+
+**Generation time depends on resolution, city data size, enabled layers, line and station counts, layout quality, and the device's CPU, GPU, memory, and WebView performance.** Phones usually take longer; start with 1024 or 2048 pixels and standard layout quality. Higher resolutions increase memory use and processing time: doubling the side length quadruples the pixel count. Subway SVG avoids PNG rasterization and encoding, but still requires layout computation. See the [image export guide (Chinese)](skylens-desktop-source/docs/MAP-EXPORT.md) for detailed options and limitations.
+
 ## Route planning
 
 Set an origin and a destination to calculate driving and public transit routes.
@@ -212,12 +226,12 @@ Build the installer and portable executable:
 npm run dist
 ```
 
-Expected outputs for version 0.1.0:
+Expected outputs for version 0.1.1:
 
 ```text
 skylens-desktop-source/release/
-  SKYLENS Desktop-0.1.0-Setup.exe
-  SKYLENS Desktop-0.1.0-Portable.exe
+  SKYLENS Desktop-0.1.1-Setup.exe
+  SKYLENS Desktop-0.1.1-Portable.exe
 ```
 
 The installer uses a wizard, allows changing the installation directory, and defaults to installing for the current user. The first build needs an internet connection to download npm dependencies, Electron, and NSIS tools. A successful build should still be followed by installation, launch, and uninstall checks. Additional packaging instructions are available in the [Chinese publishing guide](docs/发布与Windows安装包.md).

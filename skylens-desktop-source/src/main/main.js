@@ -125,7 +125,7 @@ async function openMap(id) {
     backgroundColor: '#e9ece8',
     icon: ICON,
     show: false,
-    webPreferences: { contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: false },
+    webPreferences: { preload: path.join(__dirname, 'map-preload.js'), contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: false },
   })
   mapWindows.set(id, { win, server })
   lockNavigation(win.webContents, server.origin)
@@ -239,6 +239,21 @@ async function runImport(sender, paths) {
 }
 
 function registerIpc() {
+  ipcMain.handle('map:save-export', async (event, payload) => {
+    const open = [...mapWindows.values()].find(item => item.win.webContents === event.sender)
+    if (!open || event.senderFrame?.url !== `${open.server.origin}/`) return { error: '请从地图窗口导出图片' }
+    try {
+      const extensions = { 'image/png': 'png', 'image/svg+xml': 'svg' }
+      const extension = extensions[payload?.mime]
+      if (!extension || !(payload.bytes instanceof Uint8Array) || !payload.bytes.length || payload.bytes.length > 128 * 1024 * 1024) throw new Error('无效的导出图片或文件过大')
+      const name = path.basename(String(payload.name || `SKYLENS.${extension}`)).replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
+      const result = await dialog.showSaveDialog(open.win, { title: '保存导出图片', defaultPath: name,
+        filters: [{ name: extension === 'png' ? 'PNG 图片' : 'SVG 矢量图', extensions: [extension] }] })
+      if (result.canceled || !result.filePath) return { canceled: true }
+      await fsp.writeFile(result.filePath, payload.bytes)
+      return { ok: true }
+    } catch (error) { return failure(error) }
+  })
   ipcMain.handle('app:info', () => ({ version: app.getVersion(), libraryDir: library.baseDir }))
   ipcMain.handle('library:change-location', async event => {
     if (importing) return { error: '地图导入期间不能迁移地图库，请等导入完成后重试。' }

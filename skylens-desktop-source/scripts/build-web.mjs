@@ -6,6 +6,7 @@ import { cp, rm, access } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { patchChineseLocale } from './patch-chinese-locale.mjs'
+import { installMapExport } from './install-map-export.mjs'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 const source = path.resolve(process.argv[2] ?? process.env.SKYLENS_SRC ?? '')
@@ -27,4 +28,5 @@ const target = path.resolve(here, '..', 'app')
 await rm(target, { recursive: true, force: true })
 await cp(path.join(source, 'dist'), target, { recursive: true })
 await patchChineseLocale(target)
+await installMapExport(target)
 console.log(`已更新 ${target}`)

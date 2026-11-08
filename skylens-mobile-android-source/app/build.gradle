@@ -10,11 +10,27 @@ android {
         applicationId "io.github.skylens.mobile"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 2
+        versionName "0.1.1"
+        manifestPlaceholders = [appLabel: "SKYLENS"]
+    }
+
+    signingConfigs {
+        debug {
+            // Keep a local debug key across builds; never commit this file.
+            def localKey = rootProject.file('.signing/debug.keystore')
+            if (localKey.exists()) storeFile localKey
+        }
     }
 
     buildTypes {
+        exportPreview {
+            initWith debug
+            applicationIdSuffix ".exportpreview"
+            versionNameSuffix "-export-preview"
+            manifestPlaceholders = [appLabel: "SKYLENS 导出测试版"]
+            matchingFallbacks = ['debug']
+        }
         release {
             minifyEnabled false
         }

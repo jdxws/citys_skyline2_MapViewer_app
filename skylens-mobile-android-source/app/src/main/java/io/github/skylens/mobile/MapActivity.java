@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -28,6 +29,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import android.util.Base64;
+import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -50,6 +55,8 @@ public class MapActivity extends Activity {
     private WebView web;
     private MapRouter router;
     private File dataDir;
+    private final ExportFiles exportFiles = new ExportFiles();
+    private static final int SAVE_EXPORT = 1201;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +120,7 @@ public class MapActivity extends Activity {
         }
 
         web = new WebView(this);
+        web.addJavascriptInterface(exportFiles, "SkylensFiles");
         web.setBackgroundColor(0xFFE9ECE8);
         configure(web.getSettings());
         web.setWebViewClient(new LocalClient());
@@ -198,6 +206,93 @@ public class MapActivity extends Activity {
         return new WebResourceResponse(r.mime, r.charset, r.status, r.reason, headers, r.stream);
     }
 
+    // Chunked transfer avoids a single enormous base64 message on Android's JS bridge.
+    private final class ExportFiles {
+        private File file;
+        private FileOutputStream stream;
+        private long bytes;
+        private String name;
+        private String mime;
+        private boolean choosing;
+
+        @JavascriptInterface public synchronized boolean beginFile(String filename, String type) {
+            if (file != null || choosing || !("image/png".equals(type) || "image/svg+xml".equals(type))) return false;
+            try {
+                file = File.createTempFile("map-export-", ".tmp", getCacheDir());
+                stream = new FileOutputStream(file);
+                bytes = 0;
+                mime = type;
+                name = filename.replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "_");
+                if (name.length() > 160) name = name.substring(0, 150) + (type.equals("image/png") ? ".png" : ".svg");
+                return true;
+            } catch (IOException | RuntimeException error) { cancelFile(); return false; }
+        }
+
+        @JavascriptInterface public synchronized boolean appendFile(String encoded) {
+            if (stream == null || choosing || encoded == null || encoded.length() > 65536) return false;
+            try {
+                byte[] chunk = Base64.decode(encoded, Base64.NO_WRAP);
+                if (bytes + chunk.length > 128L * 1024 * 1024) { cancelFile(); return false; }
+                stream.write(chunk); bytes += chunk.length; return true;
+            } catch (IOException | RuntimeException error) { cancelFile(); return false; }
+        }
+
+        @JavascriptInterface public synchronized void finishFile() {
+            if (stream == null || choosing) return;
+            try { stream.close(); stream = null; } catch (IOException error) { cancelFile(); fileResult(false, error.getMessage()); return; }
+            choosing = true;
+            runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed()) { cancelFile(); return; }
+                try {
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType(mime);
+                    intent.putExtra(Intent.EXTRA_TITLE, name);
+                    startActivityForResult(intent, SAVE_EXPORT);
+                } catch (RuntimeException error) { cancelFile(); fileResult(false, "无法打开文件保存窗口：" + error.getMessage()); }
+            });
+        }
+
+        @JavascriptInterface public synchronized void cancelFile() {
+            if (stream != null) try { stream.close(); } catch (IOException ignored) { }
+            stream = null;
+            if (file != null) file.delete();
+            file = null; bytes = 0; choosing = false;
+        }
+    }
+
+    private void fileResult(boolean canceled, String error) {
+        runOnUiThread(() -> {
+            if (web == null || isDestroyed()) return;
+            String detail = "{\"canceled\":" + canceled + (error == null ? "" : ",\"error\":" + JSONObject.quote(error)) + "}";
+            web.evaluateJavascript("window.dispatchEvent(new CustomEvent('skylens:file-saved',{detail:" + detail + "}))", null);
+        });
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != SAVE_EXPORT) return;
+        if (resultCode != RESULT_OK || data == null || data.getData() == null) {
+            exportFiles.cancelFile(); fileResult(true, null); return;
+        }
+        final Uri target = data.getData();
+        new Thread(() -> {
+            try {
+                File source;
+                synchronized (exportFiles) { source = exportFiles.file; }
+                if (source == null) throw new IOException("导出文件已失效，请重新生成");
+                try (InputStream input = new java.io.FileInputStream(source);
+                     OutputStream output = getContentResolver().openOutputStream(target, "wt")) {
+                    if (output == null) throw new IOException("无法写入所选位置");
+                    byte[] buffer = new byte[65536]; int length;
+                    while ((length = input.read(buffer)) >= 0) output.write(buffer, 0, length);
+                }
+                fileResult(false, null);
+            } catch (IOException | RuntimeException error) { fileResult(false, error.getMessage()); }
+            finally { exportFiles.cancelFile(); }
+        }, "skylens-save-image").start();
+    }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -217,6 +312,7 @@ public class MapActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        exportFiles.cancelFile();
         if (web != null) {
             ViewGroup parent = (ViewGroup) web.getParent();
             if (parent != null) parent.removeView(web);

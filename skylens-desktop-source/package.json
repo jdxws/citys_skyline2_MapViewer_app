@@ -1,7 +1,7 @@
 {
   "name": "skylens-desktop",
   "productName": "SKYLENS Desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "SKYLENS MAPS 离线桌面查看器：导入城市快照，在游戏之外查看 Cities: Skylines II 的城市地图",
   "main": "src/main/main.js",
   "author": "community",
@@ -11,6 +11,7 @@
     "start": "electron .",
     "test": "node --test \"test/**/*.test.{js,mjs}\"",
     "build:web": "node scripts/build-web.mjs",
+    "build:export": "node scripts/install-map-export.mjs",
     "dist": "electron-builder --win --x64",
     "dist:zip": "electron-builder --win zip --x64",
     "dist:dir": "electron-builder --win dir --x64"

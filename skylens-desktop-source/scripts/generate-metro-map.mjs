@@ -25,6 +25,7 @@ export const CONFIG = {
   stationEdgeClearance: 1.7, // 站点到不相干线路的最小距离
   restarts: 4,
   iterations: 220000,
+  extraRestarts: 8,
   title: '轨道交通示意图',
   subtitle: 'RAIL TRANSIT NETWORK MAP',
   // 线路颜色：默认使用游戏里的颜色；黄色在白底上太浅，这里加深一点（想用原色就删掉对应的行）
@@ -320,7 +321,7 @@ export function layoutNetwork(network, { seed = 1, log = () => {} } = {}) {
   let best = null
   const clean = candidate => candidate.crossings === 0 && candidate.nonOctilinear === 0
   const isBetter = (a, b) => !b || a.crossings < b.crossings || (a.crossings === b.crossings && (a.nonOctilinear < b.nonOctilinear || (a.nonOctilinear === b.nonOctilinear && a.cost < b.cost)))
-  for (let restart = 0; restart < CONFIG.restarts + 8; restart += 1) {
+  for (let restart = 0; restart < CONFIG.restarts + CONFIG.extraRestarts; restart += 1) {
     if (restart >= CONFIG.restarts && best && clean(best)) break
     const random = mulberry32(seed * 1000 + restart)
     const X = base.map(p => Math.round(p[0] + (random() - 0.5) * 2))
@@ -1027,8 +1028,8 @@ export function renderSvg({ network, positions, polylines, scene = { water: [], 
   row += 4
   out.push(`<circle cx="42" cy="${row - 5}" r="9.5" fill="#fff" stroke="#111" stroke-width="3"/><text x="62" y="${row}" font-size="14" fill="#333">换乘站</text>`)
   out.push(`<circle cx="150" cy="${row - 5}" r="5.5" fill="#fff" stroke="#222" stroke-width="2.4"/><text x="166" y="${row}" font-size="14" fill="#333">车站</text>`)
-  out.push(`<rect x="232" y="${row - 16}" width="34" height="18" rx="4" fill="#c9e6f5" stroke="#b3d9ee"/><text x="274" y="${row}" font-size="14" fill="#333">河流</text>`)
-  out.push(`<rect x="334" y="${row - 16}" width="34" height="18" rx="9" fill="#dcead2" stroke="#b9d3a7" stroke-dasharray="4 3"/><text x="376" y="${row}" font-size="14" fill="#333">山</text>`)
+  if (scene.water.length) out.push(`<rect x="232" y="${row - 16}" width="34" height="18" rx="4" fill="#c9e6f5" stroke="#b3d9ee"/><text x="274" y="${row}" font-size="14" fill="#333">河流</text>`)
+  if (scene.mountain) out.push(`<rect x="334" y="${row - 16}" width="34" height="18" rx="9" fill="#dcead2" stroke="#b9d3a7" stroke-dasharray="4 3"/><text x="376" y="${row}" font-size="14" fill="#333">山</text>`)
   out.push(`<text x="${Math.round(width) - 28}" y="${height - 14}" font-size="11" text-anchor="end" fill="#999">示意图，站间距与方位不按实际比例</text>`)
   out.push('</svg>')
   return { svg: out.join('\n'), labels, pixel, width, height: bodyHeight }
