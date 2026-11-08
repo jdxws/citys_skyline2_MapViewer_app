@@ -71,7 +71,7 @@ Download packages from **[Releases](https://github.com/jdxws/citys_skyline2_MapV
 | --- | --- | --- |
 | Windows installer | [Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Setup.exe) | Installation wizard with a choice of installation directory |
 | Windows without installation | [Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Portable.exe) | Launch the executable directly |
-| Android | [APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS-Android-0.1.1.apk) | Transfer to your phone and install |
+| Android | [APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.2/SKYLENS-Android-0.1.2.apk) | v0.1.2; fixes the bottom menu layout |
 
 ### Windows
 
@@ -89,7 +89,9 @@ Supports 64-bit Windows 10/11. Release packages include Electron and the files n
 
 Requires Android 8.0 (API 26) or later. Builds with the same signing certificate can update in place. Keep your original snapshot ZIPs before upgrading; uninstalling clears the application's map library.
 
-**Android v0.1.1 upgrade notice:** this APK uses a different signing certificate from v0.1.0 and cannot update that older build in place. Back up your original snapshot ZIPs and any maps you need before uninstalling the old app, installing the new version, and importing snapshots again. Uninstalling clears the application's map library.
+**Android v0.1.2 update:** fixes the map menu opening at the top of the screen, restoring the bottom panel and its expand/collapse gestures. v0.1.2 uses the same signing certificate as v0.1.1 and can update it in place. Layout checks passed at four simulated phone sizes; Android device verification has not been performed.
+
+**Older-version upgrade notice:** v0.1.1 / v0.1.2 use a different signing certificate from v0.1.0 and cannot update v0.1.0 in place. Back up your original snapshot ZIPs and any maps you need before uninstalling the old app, installing the new version, and importing snapshots again. Uninstalling clears the application's map library.
 
 ## Prepare city data
 

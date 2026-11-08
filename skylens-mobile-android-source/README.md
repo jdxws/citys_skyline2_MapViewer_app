@@ -6,6 +6,8 @@
 
 纯原生 Java + WebView，**没有任何第三方依赖**，只使用 Android 系统自带的 API。
 
+v0.1.2 修复了地图菜单展开后显示在屏幕顶部的问题：恢复加载 `android-mobile.css`，菜单重新锚定屏幕底部。与 v0.1.1 签名一致，可直接覆盖安装。已通过四种手机尺寸的模拟布局检查，尚未进行安卓真机验证。
+
 ## 一、构建并安装
 
 ### 方式 A：Android Studio（推荐）
@@ -23,7 +25,7 @@
 ```
 产物：`app/build/outputs/apk/debug/app-debug.apk`
 
-导出测试版产物在 `app/build/outputs/apk/exportPreview/app-exportPreview.apk`，包名为 `io.github.skylens.mobile.exportpreview`，有独立地图库，需重新导入地图，不会覆盖旧版。版本号为 `0.1.1-export-preview`。
+导出测试版产物在 `app/build/outputs/apk/exportPreview/app-exportPreview.apk`，包名为 `io.github.skylens.mobile.exportpreview`，有独立地图库，需重新导入地图，不会覆盖旧版。版本号为 `0.1.2-export-preview`。
 
 构建时优先使用本地 `.signing/debug.keystore`（不提交到 Git）。请保留此文件，以便以后用同一签名覆盖更新；没有此文件时使用 Android 默认的调试签名配置。签名与已安装旧版不一致时，原包名 APK 不能直接覆盖安装，可先使用并行测试版。
 

@@ -99,7 +99,7 @@
 | --- | --- | --- |
 | Windows 安装版 | [下载 Setup.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Setup.exe) | 安装向导版，可选择安装目录 |
 | Windows 免安装版 | [下载 Portable.exe](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS.Desktop-0.1.1-Portable.exe) | 双击启动，无需安装 |
-| Android | [下载 APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.1/SKYLENS-Android-0.1.1.apk) | 传到手机后直接安装 |
+| Android | [下载 APK](https://github.com/jdxws/citys_skyline2_MapViewer_app/releases/download/v0.1.2/SKYLENS-Android-0.1.2.apk) | v0.1.2，修复菜单底部布局 |
 
 ### Windows
 
@@ -117,7 +117,9 @@
 
 最低支持 Android 8.0（API 26）。同签名版本可覆盖安装；升级前请保留原始快照 ZIP，卸载应用会清除应用内地图库。
 
-**v0.1.1 Android 升级提示：** 此次 APK 与 v0.1.0 使用的签名证书不同，无法直接覆盖安装该旧版。请先备份原始快照 ZIP 及需要保留的地图数据，再卸载旧版并安装新版，最后重新导入快照；卸载会清除应用内地图库。
+**Android v0.1.2 更新：** 修复地图菜单展开后显示在屏幕顶部的问题，恢复底部面板布局及向上展开、向下收起的操作。v0.1.2 与 v0.1.1 签名一致，可直接覆盖安装。已通过四种手机尺寸的模拟布局检查，尚未进行安卓真机验证。
+
+**旧版升级提示：** v0.1.1 / v0.1.2 与 v0.1.0 使用的签名证书不同，无法直接覆盖安装 v0.1.0。请先备份原始快照 ZIP 及需要保留的地图数据，再卸载旧版并安装新版，最后重新导入快照；卸载会清除应用内地图库。
 
 ## 准备城市数据
 
